@@ -1,0 +1,11 @@
+flask
+flask-sqlalchemy
+flask-login
+email-validator
+pdfplumber
+pandas
+openpyxl
+Werkzeug
+gunicorn
+flask-wtf
+pymysql

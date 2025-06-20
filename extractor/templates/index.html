@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% block content %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bank Statement Extractor - Professional</title>
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #f5f7fa;
+      color: #333;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      background-color: #002b5b;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .brand-subtitle {
+      font-size: 14px;
+      color: #d2d2d2;
+    }
+
+    .upload-section {
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .upload-title {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .upload-description {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .file-upload-area {
+      border: 2px dashed #ccc;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    .file-upload-area:hover {
+      border-color: #007bff;
+    }
+
+    .file-upload-icon {
+      font-size: 40px;
+      color: #007bff;
+    }
+
+    .file-upload-text {
+      font-size: 16px;
+    }
+
+    .file-upload-primary {
+      font-weight: bold;
+    }
+
+    .file-upload-formats {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      margin-top: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-actions {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .btn {
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn i {
+      margin-right: 6px;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .footer {
+      background-color: #002b5b;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 40px;
+    }
+
+    #fileName {
+      margin-top: 10px;
+      color: #333;
+    }
+
+    /* Loading Section */
+    .loading-section {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .loading-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 40px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .loading-spinner {
+      margin-bottom: 20px;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid #eee;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 10px;
+    }
+
+    .loading-description {
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .loading-progress {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #007bff;
+      border-radius: 5px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .progress-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <h1 class="brand-title"><i class="fas fa-university"></i> Bank Statement Extractor</h1>
+      <p class="brand-subtitle">Professional financial document analysis</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div class="container">
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <ul style="background:#ffe6e6; color:#c00;">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Upload Form -->
+      <section class="upload-section" id="uploadSection">
+        <h2 class="upload-title">Upload Bank Statement</h2>
+        <p class="upload-description">PDF format preferred. Password required if file is protected.</p>
+
+        <form method="POST" enctype="multipart/form-data">
+          <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+            <input type="file" name="pdf_file" id="fileInput" class="file-input" accept=".pdf,.txt,.csv" style="display:none;" required>
+            <div>
+              <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+              <p class="file-upload-text">
+                <span class="file-upload-primary">Click to upload</span>
+                <br><span class="file-upload-secondary">or drag and drop your file</span>
+              </p>
+              <p class="file-upload-formats">Supported: PDF, TXT, CSV (Max 10MB)</p>
+              <p id="fileName"></p>
+            </div>
+          </div>
+
+          <input type="password" name="password" class="form-control" placeholder="PDF Password (if any)" />
+
+          <div class="form-actions">
+            <button type="submit" class="btn">
+              <i class="fas fa-cogs"></i> Extract Data
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Loading Section -->
+      <section class="loading-section" id="loadingSection">
+        <div class="loading-card">
+          <div class="loading-spinner">
+            <div class="spinner"></div>
+          </div>
+          <h3 class="loading-title">Processing Statement</h3>
+          <p class="loading-description">Analyzing your bank statement data...</p>
+          <div class="loading-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-text" id="progressText">0%</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center">
+      <p><i class="fas fa-shield-alt"></i> Secure & Confidential – Data never leaves your device</p>
+      <p>&copy; Design and developed by <strong>Yenumula Thanmay Kumar Reddy</strong></p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const fileInput = document.getElementById('fileInput');
+      const fileNameDisplay = document.getElementById('fileName');
+
+      fileInput.addEventListener('change', function () {
+        if (fileInput.files.length > 0) {
+          fileNameDisplay.textContent = fileInput.files[0].name;
+        } else {
+          fileNameDisplay.textContent = '';
+        }
+      });
+
+      const form = document.querySelector('form');
+      form.addEventListener('submit', function () {
+        document.getElementById('uploadSection').style.display = 'none';
+        document.getElementById('loadingSection').style.display = 'block';
+
+        let progress = 0;
+        const fill = document.getElementById('progressFill');
+        const text = document.getElementById('progressText');
+
+        const interval = setInterval(() => {
+          if (progress >= 100) {
+            clearInterval(interval);
+          } else {
+            progress += 5;
+            fill.style.width = progress + '%';
+            text.textContent = progress + '%';
+          }
+        }, 300);
+      });
+    });
+  </script>
+
+</body>
+{% endblock %}

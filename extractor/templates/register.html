@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Registration</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to right, #74ebd5, #acb6e5);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+      background-color: white;
+      border: none;
+      border-radius: 15px;
+    }
+    .form-label {
+      color: #333;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+    .text-info:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container mt-5 mb-5">
+  <div class="card shadow-lg p-4" style="max-width: 600px; margin: auto;">
+    <h2 class="text-center mb-4 text-primary">Registration Form</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="">
+      {{ form.hidden_tag() }}
+
+
+
+      <div class="mb-3">
+        {{ form.user_name.label(class="form-label fw-bold") }}
+        {{ form.user_name(class="form-control", placeholder="Enter Your Name") }}
+        {% for error in form.user_name.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.user_email.label(class="form-label fw-bold") }}
+        {{ form.user_email(class="form-control", placeholder="Enter Email") }}
+        {% for error in form.user_email.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.password.label(class="form-label fw-bold") }}
+        {{ form.password(class="form-control", placeholder="Enter Password") }}
+        {% for error in form.password.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="mb-3">
+        {{ form.confirm_password.label(class="form-label fw-bold") }}
+        {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
+        {% for error in form.confirm_password.errors %}
+          <div class="text-danger small">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary btn-lg rounded-pill">{{ form.submit.label.text }}</button>
+      </div>
+    </form>
+
+    <p class="mt-4 text-center">
+      Already have an account?
+      <a href="{{ url_for('users.login') }}" class="text-decoration-none text-info fw-semibold">Login here</a>.
+    </p>
+  </div>
+</div>
+<footer class="footer bg-dark text-light mt-auto py-3">
+  <div class="container text-center">
+    <p class="mb-1" style="font-size: 1rem;">
+      <i class="fas fa-shield-alt me-2"></i>
+      Secure & Confidential – Data never leaves your device
+    </p>
+    <p style="font-size: 1rem;">
+      &copy; Design and developed by <strong>Yenumula Thanmay Kumar Reddy</strong>
+    </p>
+  </div>
+</footer>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+{% endblock %}
